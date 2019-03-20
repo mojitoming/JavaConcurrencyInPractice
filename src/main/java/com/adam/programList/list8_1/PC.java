@@ -8,6 +8,7 @@ import java.util.concurrent.Executors;
 /**
  * Annotation:
  * 第 3 章 PC 应用程序阻塞队列的等价实现
+ * modified
  *
  * @Author: Adam Ming
  * @Date: Mar 20, 2019 at 3:23:02 PM
@@ -20,8 +21,11 @@ public class PC {
         Runnable producer = () -> {
             for (char ch = 'A'; ch <= 'Z'; ch++) {
                 try {
-                    bq.put(ch);
-                    System.out.printf("%c produced by producer.%n", ch);
+                    synchronized ("a") {
+                        bq.put(ch);
+                        System.out.printf("%c produced by producer.%n", ch);
+                    }
+                    Thread.sleep(1); // 睡眠 1 毫秒给操作其他任务的线程出现机会
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -32,8 +36,11 @@ public class PC {
             char ch = '\0';
             do {
                 try {
-                    ch = bq.take();
-                    System.out.printf("%c consumed by consumer.%n", ch);
+                    synchronized ("b") {
+                        ch = bq.take();
+                        System.out.printf("%c consumed by consumer.%n", ch);
+                    }
+                    Thread.sleep(1); // 睡眠 1 毫秒给操作其他任务的线程出现机会
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

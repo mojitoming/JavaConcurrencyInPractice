@@ -5,6 +5,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.concurrent.*;
 
+@SuppressWarnings("Duplicates")
 public class CalculateE {
     final static int LASTITER = 17;
 
